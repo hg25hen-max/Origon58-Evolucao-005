@@ -1,0 +1,13 @@
+
+{
+  "name": "Origon58 Evolução #005",
+  "short_name": "Origon58",
+  "description": "Cofre local para guardar, criptografar, exportar e recuperar textos e fotos.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080808",
+  "theme_color": "#080808",
+  "lang": "pt-BR"
+}
