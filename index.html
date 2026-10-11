@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Origon58 — cofre pessoal criptografado">
+  <title>Origon58</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <!-- CONFIGURAÇÃO INICIAL -->
+  <section id="setupScreen" class="screen hidden">
+    <div class="auth-box">
+      <div class="brand">O58</div>
+      <span class="eyebrow">ORIGON58</span>
+      <h1>Criar acesso</h1>
+      <p class="subtitle">Escolha três senhas para proteger o acesso ao seu cofre.</p>
+      <form id="setupForm">
+        <div class="field">
+          <label for="setupPassword1">Primeira senha</label>
+          <input type="password" id="setupPassword1" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label for="setupPassword1Confirm">Confirme a primeira senha</label>
+          <input type="password" id="setupPassword1Confirm" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label for="setupPassword2">Segunda senha</label>
+          <input type="password" id="setupPassword2" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label for="setupPassword2Confirm">Confirme a segunda senha</label>
+          <input type="password" id="setupPassword2Confirm" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label for="setupPassword3">Terceira senha</label>
+          <input type="password" id="setupPassword3" autocomplete="new-password" required>
+        </div>
+        <div class="field">
+          <label for="setupPassword3Confirm">Confirme a terceira senha</label>
+          <input type="password" id="setupPassword3Confirm" autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="primary-button">CRIAR ACESSO</button>
+      </form>
+      <p id="setupMessage" class="message" role="status"></p>
+    </div>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="loginScreen" class="screen hidden">
+    <div class="auth-box">
+      <div class="brand">O58</div>
+      <span class="eyebrow">ORIGON58</span>
+      <h1>Acesso protegido</h1>
+      <p class="subtitle">Informe as três senhas para entrar no cofre.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label for="loginPassword1">Primeira senha</label>
+          <input type="password" id="loginPassword1" autocomplete="current-password" required>
+        </div>
+        <div class="field">
+          <label for="loginPassword2">Segunda senha</label>
+          <input type="password" id="loginPassword2" autocomplete="current-password" required>
+        </div>
+        <div class="field">
+          <label for="loginPassword3">Terceira senha</label>
+          <input type="password" id="loginPassword3" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="primary-button">ENTRAR</button>
+      </form>
+      <p id="loginMessage" class="message" role="status"></p>
+    </div>
+  </section>
+
+  <!-- COFRE -->
+  <section id="vaultScreen" class="screen hidden">
+    <header class="topbar">
+      <div>
+        <span class="eyebrow">ORIGON58</span>
+        <h1>Cofre protegido</h1>
+      </div>
+      <button id="lockButton" class="icon-button" type="button"
+        title="Voltar para a tela de senha" aria-label="Voltar para a tela de senha">🔒</button>
+    </header>
+
+    <div class="content">
+      <section class="security-card">
+        <div class="security-icon">🔐</div>
+        <div>
+          <strong>Cofre protegido</strong>
+          <p>Cada informação é protegida individualmente.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <span class="eyebrow">COFRE</span>
+            <h2>Meus dados</h2>
+          </div>
+          <span id="dataCount" class="counter">0</span>
+        </div>
+        <p class="panel-description">
+          Criptografe cada dado e salve seu arquivo .enc separadamente.
+        </p>
+        <button id="addDataButton" class="primary-button" type="button">
+          + ADICIONAR DADO
+        </button>
+        <div id="dataList" class="data-list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <span class="eyebrow">CONTROLE</span>
+            <h2>Cofre</h2>
+          </div>
+        </div>
+        <button id="clearVaultButton" class="danger-button" type="button">🗑️ LIMPAR COFRE</button>
+        <button id="clearTemporaryButton" class="secondary-button" type="button">🧹 LIMPAR TEMPORÁRIOS</button>
+        <button id="decryptSavedButton" class="secondary-button" type="button">🔓 DESCRIPTOGRAFAR DADO SALVO</button>
+        <button id="logoutButton" class="secondary-button" type="button">🔒 VOLTAR PARA A SENHA</button>
+      </section>
+    </div>
+  </section>
+
+  <!-- ADICIONAR DADO -->
+  <div id="addDataModal" class="modal hidden">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="addDataTitle">
+      <span class="eyebrow">NOVO DADO</span>
+      <h2 id="addDataTitle">Adicionar informação</h2>
+      <p class="modal-description">
+        Escolha uma foto, escreva uma informação ou use os dois. Depois crie uma senha exclusiva.
+      </p>
+
+      <!-- FOTO: botão antes da informação -->
+      <div class="field photo-field">
+        <label for="newDataPhoto">Foto (opcional)</label>
+        <button id="choosePhotoButton" class="secondary-button" type="button">
+          📷 ESCOLHER FOTO
+        </button>
+        <input id="newDataPhoto" class="hidden" type="file" accept="image/*">
+        <p id="newDataPhotoName" class="photo-name" aria-live="polite">
+          Nenhuma foto selecionada.
+        </p>
+        <div id="newDataPhotoPreviewContainer" class="photo-preview-container hidden">
+          <img id="newDataPhotoPreview" class="photo-preview" alt="Prévia da foto selecionada">
+          <button id="removePhotoButton" class="danger-button" type="button">REMOVER FOTO</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="newDataText">Informação (opcional)</label>
+        <textarea id="newDataText" rows="8"
+          placeholder="Digite sua informação aqui..."></textarea>
+      </div>
+
+      <div class="field">
+        <label for="newDataPassword">Senha deste dado</label>
+        <input type="password" id="newDataPassword" autocomplete="new-password">
+      </div>
+
+      <div class="field">
+        <label for="newDataPasswordConfirm">Confirme a senha</label>
+        <input type="password" id="newDataPasswordConfirm" autocomplete="new-password">
+      </div>
+
+      <div class="modal-actions">
+        <button id="cancelAddDataButton" class="secondary-button" type="button">CANCELAR</button>
+        <button id="encryptDataButton" class="primary-button" type="button">🔐 CRIPTOGRAFAR</button>
+      </div>
+      <p id="addDataMessage" class="message" role="status"></p>
+    </div>
+  </div>
+
+  <!-- LIMPAR COFRE -->
+  <div id="clearVaultModal" class="modal hidden">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="clearVaultTitle">
+      <span class="eyebrow">ÁREA DESTRUTIVA</span>
+      <h2 id="clearVaultTitle">Limpar cofre</h2>
+      <p class="modal-description">
+        Esta ação apagará todos os dados armazenados no cofre.
+      </p>
+      <div class="field">
+        <label for="clearVaultPassword">Senha de limpeza</label>
+        <input type="password" id="clearVaultPassword" autocomplete="current-password">
+      </div>
+      <div class="field">
+        <label for="clearVaultPasswordConfirm">Confirme a senha</label>
+        <input type="password" id="clearVaultPasswordConfirm" autocomplete="current-password">
+      </div>
+      <div class="modal-actions">
+        <button id="cancelClearVaultButton" class="secondary-button" type="button">CANCELAR</button>
+        <button id="confirmClearVaultButton" class="danger-button" type="button">🗑️ APAGAR TUDO</button>
+      </div>
+      <p id="clearVaultMessage" class="message" role="status"></p>
+    </div>
+  </div>
+
+  <!-- DESCRIPTOGRAFAR ARQUIVO EXTERNO -->
+  <div id="decryptSavedModal" class="modal hidden">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="decryptSavedTitle">
+      <span class="eyebrow">DADO SALVO</span>
+      <h2 id="decryptSavedTitle">Descriptografar dado salvo</h2>
+      <p class="modal-description">
+        Escolha um arquivo .enc salvo anteriormente e informe a senha daquele dado.
+      </p>
+      <div class="field">
+        <label for="savedDataFile">Arquivo .ENC</label>
+        <input type="file" id="savedDataFile" accept=".enc,application/octet-stream">
+      </div>
+      <div class="field">
+        <label for="savedDataPassword">Senha do dado</label>
+        <input type="password" id="savedDataPassword" autocomplete="off">
+      </div>
+      <div class="modal-actions">
+        <button id="cancelDecryptSavedButton" class="secondary-button" type="button">CANCELAR</button>
+        <button id="confirmDecryptSavedButton" class="primary-button" type="button">🔓 DESCRIPTOGRAFAR</button>
+      </div>
+      <p id="decryptSavedMessage" class="message" role="status"></p>
+      <div id="savedDataResult" class="saved-data-result hidden">
+        <span class="eyebrow">CONTEÚDO DESCRIPTOGRAFADO</span>
+        <div id="savedDataResultText" class="result-text"></div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
